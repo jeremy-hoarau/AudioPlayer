@@ -1,22 +1,25 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AudioPlayer.Data;
+using AudioPlayer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AudioPlayer.Controllers
 {
+    [Authorize]
     public class PlaylistController : Controller
     {
-        // GET: PlaylistController
-        public ActionResult Index()
+        private readonly ApplicationDbContext _appDbContext;
+
+        public PlaylistController(ApplicationDbContext appDbContext)
         {
-            return View();
+            _appDbContext = appDbContext;
         }
 
-        // GET: PlaylistController/Details/5
-        public ActionResult Details(int id)
+        // GET: PlaylistController
+        public ActionResult Index()
         {
             return View();
         }
@@ -30,58 +33,118 @@ namespace AudioPlayer.Controllers
         // POST: PlaylistController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(CreatePlaylistViewModel model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                Playlist playlist = new Playlist()
+                {
+                    Name = model.Title,
+                    UserID = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                    SongsID = ""
+                };
+
+                bool result = _appDbContext.AddPlaylist(playlist);
+
+                if (result)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "The playlist creation failed.");
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View(model);
+
         }
 
         // GET: PlaylistController/Edit/5
+        [Route("/Playlist/Edit/{id}")]
         public ActionResult Edit(int id)
         {
-            return View();
+            //if (!_appDbContext.UserOwnsPlaylist(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
+                //return RedirectToAction("Index", "Home");
+
+            EditPlaylistViewModel model = new EditPlaylistViewModel()
+            {
+                ID = id,
+                Title = _appDbContext.GetPlaylist(id).Name,
+                Songs = _appDbContext.GetSongsOfPlaylist(id)
+            };
+
+            return View(model);
         }
 
         // POST: PlaylistController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, EditPlaylistViewModel model)
         {
-            try
+            if (!_appDbContext.UserOwnsPlaylist(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
+                return RedirectToAction("Index", "Home");
+
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                bool result = _appDbContext.RenamePlaylist(id, model.Title);
+
+                if (result)
+                {
+                    return RedirectToAction("Edit", "Playlist", new { id = id });
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "The operation failed.");
+                }
             }
-            catch
+            return View(model);
+        }
+
+        // POST PlaylistControler/Edit/5/AddSong
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Playlist/Edit/{id}/AddSong")]
+        public async Task<IActionResult> AddSong(int id, EditPlaylistViewModel model)
+        {
+            if (!_appDbContext.UserOwnsPlaylist(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
+                return RedirectToAction("Index", "Home");
+
+            string fileName = model.File.FileName;
+            string path = "Content/Music/" + fileName;
+            using (Stream fileStream = new FileStream(path, FileMode.Create))
             {
-                return View();
+                await model.File.CopyToAsync(fileStream);
             }
+
+            int songID = _appDbContext.SaveSong(path, fileName.Substring(0, fileName.LastIndexOf('.')));
+            if (songID != -1)
+                _appDbContext.AddSongToPlaylist(id, songID);
+
+            return RedirectToAction("Edit", "Playlist", new { id = id });
         }
 
         // GET: PlaylistController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            if (!_appDbContext.UserOwnsPlaylist(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
+                return RedirectToAction("Index", "Home");
+
+            string userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_appDbContext.UserOwnsPlaylist(userID, id))
+                _appDbContext.DeletePlaylist(id);
+            return RedirectToAction("Index", "Home");
         }
 
-        // POST: PlaylistController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [Route("Playlist/Edit/{id}/DeleteSong/{songId}")]
+        // POST: PlaylistController/Delete/5
+        public ActionResult DeleteSong(int id, int songId)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            string userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_appDbContext.UserOwnsPlaylist(userID, id))
+                _appDbContext.DeleteSongFromPlaylist(id, songId);
+            return RedirectToAction("Edit", "Playlist", new { id = id });
         }
     }
 }
