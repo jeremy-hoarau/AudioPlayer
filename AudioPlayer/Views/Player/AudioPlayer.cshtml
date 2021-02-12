@@ -1,0 +1,22 @@
+﻿@model AudioPlayerViewModel
+@{
+    ViewData["Title"] = "Player";
+}
+
+<head>
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="/js/wavesurfer.js"></script>
+    <script type="text/javascript" src="~/js/audioplayer.js"></script>
+</head>
+
+
+<h2>
+    @Model.Playlist.Name
+</h2>
+
+<div id="waveform"></div>
+
+<input type="button" id="play" value="Play" class="btn btn-primary" onclick='LoadSong("@Model.Songs[Model.FirstSongIndex].Path")'/>
+
+
+

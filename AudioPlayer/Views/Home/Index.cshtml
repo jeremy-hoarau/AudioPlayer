@@ -13,11 +13,14 @@
 <div class="container-fluid" style="margin:10px">
     @foreach (Playlist playlist in Model.Playlists)
     {
-        <div class="row" style="margin:10px">
-            <h3 class="col">@playlist.Name</h3>
-            <a class="btn btn-success align-content-lg-end col-md-1" style="margin-right:5px; color:white">Play</a>
-            <a class="btn btn-primary align-content-lg-end col-md-1" style="margin-right:5px" asp-action="Edit" asp-controller="Playlist" asp-route-id="@playlist.ID">Edit</a>
-            <a class="btn btn-danger align-content-lg-end col-md-1" asp-action="Delete" asp-controller="Playlist" asp-route-id="@playlist.ID">Delete</a>
-        </div>
+    <div class="row" style="margin:10px">
+        <h3 class="col">@playlist.Name</h3>
+        @if (playlist.SongsID != null && playlist.SongsID.Length > 0)
+        {
+            <a class="btn btn-success align-content-lg-end col-md-1" style="margin-right:5px; color:white" asp-action="AudioPlayer" asp-controller="Player" asp-route-id="@playlist.ID" asp-route-firstSongIndex="0">Play</a>
+        }
+        <a class="btn btn-primary align-content-lg-end col-md-1" style="margin-right:5px" asp-action="Edit" asp-controller="Playlist" asp-route-id="@playlist.ID">Edit</a>
+        <a class="btn btn-danger align-content-lg-end col-md-1" asp-action="Delete" asp-controller="Playlist" asp-route-id="@playlist.ID">Delete</a>
+    </div>
     }
 </div>

@@ -1,6 +1,7 @@
 ﻿using AudioPlayer.Data;
 using AudioPlayer.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Security.Claims;
@@ -12,10 +13,12 @@ namespace AudioPlayer.Controllers
     public class PlaylistController : Controller
     {
         private readonly ApplicationDbContext _appDbContext;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public PlaylistController(ApplicationDbContext appDbContext)
+        public PlaylistController(ApplicationDbContext appDbContext, IWebHostEnvironment hostEnvironment)
         {
             _appDbContext = appDbContext;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: PlaylistController
@@ -63,8 +66,8 @@ namespace AudioPlayer.Controllers
         [Route("/Playlist/Edit/{id}")]
         public ActionResult Edit(int id)
         {
-            //if (!_appDbContext.UserOwnsPlaylist(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
-                //return RedirectToAction("Index", "Home");
+            if (!_appDbContext.UserOwnsPlaylist(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
+                return RedirectToAction("Index", "Home");
 
             EditPlaylistViewModel model = new EditPlaylistViewModel()
             {
@@ -110,8 +113,8 @@ namespace AudioPlayer.Controllers
                 return RedirectToAction("Index", "Home");
 
             string fileName = model.File.FileName;
-            string path = "Content/Music/" + fileName;
-            using (Stream fileStream = new FileStream(path, FileMode.Create))
+            string path = "/Content/Music/" + fileName;
+            using (Stream fileStream = new FileStream(_hostEnvironment.WebRootPath + path, FileMode.Create))
             {
                 await model.File.CopyToAsync(fileStream);
             }

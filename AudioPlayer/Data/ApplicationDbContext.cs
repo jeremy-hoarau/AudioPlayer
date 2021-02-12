@@ -1,5 +1,6 @@
 ﻿using AudioPlayer.Models;
 using AudioPlayer.Tools;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,9 +13,11 @@ namespace AudioPlayer.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IWebHostEnvironment hostEnvironment)
             : base(options)
         {
+            _hostEnvironment = hostEnvironment;
         }
 
         public DbSet<Playlist> Playlists { get; set; }
@@ -101,7 +104,7 @@ namespace AudioPlayer.Data
 
             if(!Songs.Where(s => s.Path == song.Path).Any())
             {
-                File.Delete(song.Path);
+                File.Delete(_hostEnvironment.WebRootPath + song.Path);
             }
         }
         #endregion
