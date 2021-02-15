@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace AudioPlayer.Models
 {
@@ -9,6 +6,7 @@ namespace AudioPlayer.Models
     {
         public Playlist Playlist { get; set; }
         public int FirstSongIndex { get; set; } //first song to play when opening the player
-        public List<Song> Songs { get; set; }
+        public string[] SongsPaths { get; set; }
+        public string[] SongsTitles { get; set; }
     }
 }

@@ -1,10 +1,7 @@
 ﻿using AudioPlayer.Data;
 using AudioPlayer.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AudioPlayer.Controllers
 {
@@ -19,10 +16,21 @@ namespace AudioPlayer.Controllers
 
         public IActionResult AudioPlayer(int id, int firstSongIndex)
         {
+            List<Song> songs = _appDbContext.GetSongsOfPlaylist(id);
+            string[] songsPaths = new string[songs.Count];
+            string[] songsTitles = new string[songs.Count];
+
+            for(int i = 0; i < songs.Count; i++)
+            {
+                songsPaths[i] = songs[i].Path;
+                songsTitles[i] = songs[i].Title;
+            }
+
             AudioPlayerViewModel model = new AudioPlayerViewModel()
             {
                 Playlist = _appDbContext.GetPlaylist(id),
-                Songs = _appDbContext.GetSongsOfPlaylist(id),
+                SongsPaths = songsPaths,
+                SongsTitles = songsTitles,
                 FirstSongIndex = firstSongIndex,
             };
             return View(model);
