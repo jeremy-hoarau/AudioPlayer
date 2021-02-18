@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace AudioPlayer.Controllers
 {
-    public class PlayerController : Controller
+    public class PlayerController : CustomController
     {
         private readonly ApplicationDbContext _appDbContext;
 

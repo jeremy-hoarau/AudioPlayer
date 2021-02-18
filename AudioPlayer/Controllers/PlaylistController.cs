@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace AudioPlayer.Controllers
 {
     [Authorize]
-    public class PlaylistController : Controller
+    public class PlaylistController : CustomController
     {
         private readonly ApplicationDbContext _appDbContext;
         private readonly IWebHostEnvironment _hostEnvironment;

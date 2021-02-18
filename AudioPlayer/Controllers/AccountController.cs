@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AudioPlayer.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : CustomController
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;

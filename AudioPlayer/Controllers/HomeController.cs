@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace AudioPlayer.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : CustomController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _appDbContext;

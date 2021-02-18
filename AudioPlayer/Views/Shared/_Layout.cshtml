@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    bool DarkTheme = (bool)ViewData["DarkTheme"];
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,6 +9,14 @@
     <title>@ViewData["Title"] - AudioPlayer</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    @if (DarkTheme)
+    {
+        <link rel="stylesheet" href="~/css/theme-dark.css" />
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/css/theme-light.css" />
+    }
 </head>
 <body>
     <header>
@@ -18,9 +29,19 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <div class="custom-control custom-switch" style="padding-right:50px">
+                                @if (DarkTheme)
+                                {
+                                    <input type="checkbox" class="custom-control-input form-control" id="darkThemeSwitch" checked>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" class="custom-control-input form-control" id="darkThemeSwitch">
+                                }
+                                <label class="custom-control-label" for="darkThemeSwitch">Dark theme</label>
+                            </div>
                         </li>
                     </ul>
                 </div>
