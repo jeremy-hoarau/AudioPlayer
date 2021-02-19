@@ -6,7 +6,6 @@ var songsPaths;
 var songsTitles;
 
 $(document).ready(function () {
-
     wavesurfer = WaveSurfer.create({
         container: '#waveform'
     });
@@ -17,7 +16,6 @@ $(document).ready(function () {
 
     LoadSong();
 });
-
 
 function LoadSong() {
     wavesurfer.load(window.location.protocol + "//" + window.location.host + "/" + songsPaths[currentSongIndex]);

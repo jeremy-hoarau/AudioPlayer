@@ -144,6 +144,9 @@ namespace AudioPlayer.Controllers
         // POST: PlaylistController/Delete/5
         public ActionResult DeleteSong(int id, int songId)
         {
+            if (!_appDbContext.UserOwnsPlaylist(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
+                return RedirectToAction("Index", "Home");
+
             string userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_appDbContext.UserOwnsPlaylist(userID, id))
                 _appDbContext.DeleteSongFromPlaylist(id, songId);

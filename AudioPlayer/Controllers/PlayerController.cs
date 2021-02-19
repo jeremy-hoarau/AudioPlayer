@@ -2,6 +2,7 @@
 using AudioPlayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace AudioPlayer.Controllers
 {
@@ -16,6 +17,9 @@ namespace AudioPlayer.Controllers
 
         public IActionResult AudioPlayer(int id, int firstSongIndex)
         {
+            if (!_appDbContext.UserOwnsPlaylist(User.FindFirstValue(ClaimTypes.NameIdentifier), id))
+                return RedirectToAction("Index", "Home");
+
             List<Song> songs = _appDbContext.GetSongsOfPlaylist(id);
             string[] songsPaths = new string[songs.Count];
             string[] songsTitles = new string[songs.Count];

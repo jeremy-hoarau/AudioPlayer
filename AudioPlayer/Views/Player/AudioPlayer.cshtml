@@ -16,23 +16,31 @@
     </script>
 </head>
 
+<h1 id="song-title" style="text-align:center; margin-top: 25px"></h1>
 
-<h2>
+<div id="waveform" style="margin-top: 50px"></div>
+
+<div class="container" style="margin-top:50px">
+    <div class="row justify-content-md-center">
+        <div class="col-md-4 offset-4">
+            <div class="row justify-content-md-center">
+                <div class="col">
+                    <i class="bi-skip-forward-circle-fill" style="font-size:5rem;" onclick="PreviousSong(); $('#play-pause').addClass('bi-pause-circle-fill').removeClass('bi-play-circle-fill')"></i>
+                </div>
+                <div class="col">
+                    <i id="play-pause" class="bi-pause-circle-fill" style="font-size:5rem" onclick="if (wavesurfer.isPlaying()) { $(this).addClass('bi-play-circle-fill').removeClass('bi-pause-circle-fill') } else { $(this).addClass('bi-pause-circle-fill').removeClass('bi-play-circle-fill') }; PlayPause()"></i>
+                </div>
+                <div class="col">
+                    <i class="bi-skip-backward-circle-fill" style="font-size:5rem" onclick="NextSong(); $('#play-pause').addClass('bi-pause-circle-fill').removeClass('bi-play-circle-fill')"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md offset-3 align-self-center">
+            <i class="bi-volume-up-fill" style="font-size:3rem" onclick="$(this).toggleClass('bi-volume-mute-fill').toggleClass('bi-volume-up-fill'); ToggleMute()"></i>
+        </div>
+    </div>
+</div>
+
+<h4 class="playlist-title" style="text-align:center; margin-top: 25px">
     @Model.Playlist.Name
-</h2>
-
-<div id="waveform"></div>
-<br />
-<h4 id="song-title"></h4>
-<br />
-<br />
-
-<input type="button" id="play" value="Play" class="btn btn-primary" onclick='PlayPause()'/>
-<br/>
-<input type="button" id="previous" value="Previous" class="btn btn-primary" onclick='PreviousSong()'/>
-<input type="button" id="previous" value="Next" class="btn btn-primary" onclick='NextSong()'/>
-<br/>
-<input type="button" id="mute" value="Mute" class="btn btn-primary" onclick='ToggleMute()'/>
-
-
-
+</h4>

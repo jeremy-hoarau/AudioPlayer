@@ -5,8 +5,69 @@
     red: #d72323
     light: #f5eded
 
+    rich black: #071013
+    pacific blue: #23B5D3
+    pewter vlue: #75ABBC
+    cadet blue crayola: #A2AEBB
+    gainsboro: #DFE0E2
 */
 
-body{
-    background-color: #000000
+
+
+body {
+    background-color: #071013;
+    color: #DFE0E2;
+}
+
+nav {
+    background-color: #18343d;
+    color: #DFE0E2;
+}
+
+.navbar-light .navbar-text, .navbar-light .navbar-nav .nav-link {
+    color: #DFE0E2;
+}
+
+.home {
+    text-decoration: none;
+    color: #DFE0E2;
+}
+
+    .home:hover {
+        text-decoration: none;
+        color: #DFE0E2;
+    }
+
+.btn{
+    border:0px;
+}
+
+.btn-play {
+    background-color: #DFE0E2;
+}
+
+.btn-create {
+    background-color: #18343d;
+    color: #DFE0E2;
+}
+    .btn-create:hover {
+        color: #DFE0E2;
+    }
+
+.btn-edit {
+    background-color: #23B5D3;
+}
+
+.btn-delete {
+    background-color: #d72323;
+}
+
+.playlist-title {
+    color: #f5eded
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #071013 !important;
+    background-color: #071013 !important;
+    color: red !important;
 }

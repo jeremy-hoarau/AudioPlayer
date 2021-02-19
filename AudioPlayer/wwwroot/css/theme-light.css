@@ -5,8 +5,47 @@
     red: #d72323
     light: #f5eded
 
+    rich black: #071013
+    pacific blue: #23B5D3
+    pewter vlue: #75ABBC
+    cadet blue crayola: #A2AEBB
+    gainsboro: #DFE0E2
 */
 
-body{
-    background-color: #ffffff
+.home {
+    text-decoration: none;
+    color: #212529;
+}
+
+    .home:hover {
+        text-decoration: none;
+        color: #212529;
+    }
+
+.navbar-light .navbar-text, .navbar-light .navbar-nav .nav-link {
+    color: #212529;
+}
+
+.btn {
+    border: 0px;
+}
+
+.btn-play {
+    background-color: #071013;
+    color: #DFE0E2;
+}
+    .btn-play:hover {
+        color: #DFE0E2;
+    }
+
+.btn-create {
+    background-color: #23B5D3;
+}
+
+.btn-edit {
+    background-color: #A2AEBB;
+}
+
+.btn-delete {
+    background-color: #d72323;
 }
