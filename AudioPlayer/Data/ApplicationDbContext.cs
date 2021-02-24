@@ -25,18 +25,18 @@ namespace AudioPlayer.Data
 
 
         #region Playlist
-        internal bool AddPlaylist(Playlist playlist)
+        public bool AddPlaylist(Playlist playlist)
         {
             Playlists.Add(playlist);
             return SaveChanges() > 0;
         }
 
-        internal List<Playlist> GetUserPlaylists(string userID)
+        public List<Playlist> GetUserPlaylists(string userID)
         {
             return Playlists.Where(playlist => playlist.UserID == userID).ToList();
         }
 
-        internal void DeletePlaylist(int id)
+        public void DeletePlaylist(int id)
         {
             foreach (Song song in GetSongsOfPlaylist(id))
                 DeleteSongFromPlaylist(id, song.ID);
@@ -44,7 +44,7 @@ namespace AudioPlayer.Data
             SaveChanges();
         }
 
-        internal bool UserOwnsPlaylist(string userID, int playlistID)
+        public bool UserOwnsPlaylist(string userID, int playlistID)
         {
             Playlist playlist = Playlists.Find(playlistID);
             if (playlist == null)
@@ -52,12 +52,12 @@ namespace AudioPlayer.Data
             return playlist.UserID == userID;
         }
 
-        internal Playlist GetPlaylist(int playlistID)
+        public Playlist GetPlaylist(int playlistID)
         {
             return Playlists.Find(playlistID);
         }
 
-        internal bool RenamePlaylist(int playlistID, string newTitle)
+        public bool RenamePlaylist(int playlistID, string newTitle)
         {
             Playlists.Find(playlistID).Name = newTitle;
             return SaveChanges() > 0;
@@ -65,7 +65,7 @@ namespace AudioPlayer.Data
         #endregion
 
         #region Song
-        internal int SaveSong(string path, string title)
+        public int SaveSong(string path, string title)
         {
             Song song = new Song()
             {
@@ -79,7 +79,7 @@ namespace AudioPlayer.Data
             return -1;
         }
 
-        internal bool AddSongToPlaylist(int playlistID, int songID)
+        public bool AddSongToPlaylist(int playlistID, int songID)
         {
             List<int> songsID = Converter.StringToListOfInt(Playlists.Find(playlistID).SongsID);
             songsID.Add(songID);
@@ -87,13 +87,13 @@ namespace AudioPlayer.Data
             return SaveChanges() > 0;
         }
 
-        internal List<Song> GetSongsOfPlaylist(int playlistID)
+        public List<Song> GetSongsOfPlaylist(int playlistID)
         {
             List<int> songsID = Converter.StringToListOfInt(Playlists.Find(playlistID).SongsID);
             return Songs.Where(song => songsID.Contains(song.ID)).ToList();
         }
 
-        internal void DeleteSongFromPlaylist(int playlistID, int songID)
+        public void DeleteSongFromPlaylist(int playlistID, int songID)
         {
             List<int> songsID = Converter.StringToListOfInt(Playlists.Find(playlistID).SongsID);
             songsID.Remove(songID);

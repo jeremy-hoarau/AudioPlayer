@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AudioPlayer.Tools
 {
-    static class Converter
+    public static class Converter
     {
         public static string ListOfIntToString(List<int> input)
         {

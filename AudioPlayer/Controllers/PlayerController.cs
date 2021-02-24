@@ -1,11 +1,13 @@
 ﻿using AudioPlayer.Data;
 using AudioPlayer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace AudioPlayer.Controllers
 {
+    [Authorize]
     public class PlayerController : CustomController
     {
         private readonly ApplicationDbContext _appDbContext;
